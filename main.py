@@ -44,13 +44,6 @@ logging.basicConfig(filename='tgbot.log', level=logging.INFO)
 # selected_flats = ''  # выбранная квартира
 
 
-# def getRow(id: int, rnum: int):
-#     dbConn = sqlite3.connect("CIAN.db")
-#     cursor = dbConn.cursor()
-#     row = cursor.execute("SELECT * FROM Flat1 ORDER BY P2 ASC LIMIT 1 OFFSET {}".format(rnum)).fetchone()
-#     if row:
-#         return str(row[id])
-
 def init_user(ui, f, l, un):
     connection = sqlite3.connect('users.db')
     cursor = connection.cursor()
