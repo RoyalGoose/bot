@@ -2,7 +2,7 @@ TOKEN = "1049720834:AAF94_FuKA5bT_GOXuoEEXkdFnkjB7jH1kk"
 # PROXY = 'socks5://82.208.153.25:36918'
 PROXY = 'https://2cm9tVBvY2:DrQ4yy4GMa@95.165.151.65:47887'
 DB_PATH = r'X:\data.db'
-
+PDF_PATH = r'X:\pdfs'
 
 '''
 82.208.153.25	36918	Romania Bucharest

@@ -564,7 +564,7 @@ def send_pdf(m: Message, flat, a, key):
     lat = float(lat[:2] + '.' + lat[2:])
     lon = str(flat[6])[:-2]
     lon = float(lon[:2] + '.' + lon[2:])
-    f = open(r'X:\pdfs\%s.pdf' % flat_id, "rb")
+    f = open(PDF_PATH + '/%s.pdf' % flat_id, "rb")
     bot.send_chat_action(m.chat.id, action='upload_document')
     bot.send_document(m.chat.id, f, reply_markup=key, caption=a)  # , caption='Презентация %s' % flat_id)
     # bot.send_chat_action(m.chat.id, action='find_location')
