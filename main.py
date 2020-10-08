@@ -50,7 +50,8 @@ def update_db(ui, properties, values):
 
 
 def slog(type='info', txt=''):
-    txt = datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f") + txt
+    txt = datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f ") + txt
+    print(txt)
     if type == 'info':
         logging.info(txt)
     if type == 'cri':
@@ -133,9 +134,9 @@ def start(m: Message):
     init_user(userid, firstname, lastname, username)
     update_db(userid, ['stage'], ['main'])
     Keyboard.main_menu(m)
-    log = '%s User %s @%s %s %s started work' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-                                                 userid, username, firstname, lastname)
-    logging.info(log)
+    log = 'User %s @%s %s %s started work' % (userid, username, firstname, lastname)
+    # logging.info(log)
+    slog('info', log)
 
 
 @bot.callback_query_handler(func=lambda c: True)
@@ -566,7 +567,7 @@ def send_action(id, ac):
 def send_doc(id, f, mar, cap):
     bot.send_document(id, f, reply_markup=mar, caption=cap)
 
-    
+
 def send_pdf(m: Message, flat, a, key):
     flat_id = flat[0]
     lat = str(flat[5])[:-2]
