@@ -30,7 +30,7 @@ def changerooms(r1, r2, r3, r4):
 
 
 def changedist(vco, tco, tt, ztk):
-    path = r'C:\Users\Veleslav\Downloads\metro.csv'
+    path = 'metro.csv'
     f = open(path, encoding='UTF-8')
     reader = csv.reader(f, delimiter=';')
     kcv = ['кольцо']
