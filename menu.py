@@ -45,7 +45,7 @@ class Keyboard:
         keyboard.add(*[types.KeyboardButton(name) for name in ['СЗАО ↖', 'САО ⬆', '↗ СВАО']])
         keyboard.add(*[types.KeyboardButton(name) for name in ['ЗАО ⬅', 'ЦАО ⏺', '➡ ВАО']])
         keyboard.add(*[types.KeyboardButton(name) for name in ['ЮЗАО ↙', 'ЮАО ⬇', '↘ ЮВАО']])
-        keyboard.add(*[types.KeyboardButton(name) for name in ['НАО (Новомосковский)', 'Любой округ']])  # 'Любой 🔀'
+        keyboard.add(*[types.KeyboardButton(name) for name in ['НАО (Новомосковский)', 'Далее ➡']])  # 'Любой 🔀'
         keyboard.add(*[types.KeyboardButton(name) for name in ['Вернутся в меню ↩']])
         bot.send_chat_action(m.chat.id, action="typing")
         bot.send_message(m.chat.id, 'Выберите административный округ (один или несколько вариантов)',

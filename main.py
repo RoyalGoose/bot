@@ -28,7 +28,7 @@ def init_user(ui, f, l, un):
                  str(f) if i == 1 else
                  str(l) if i == 2 else
                  str(un) if i == 3 else
-                 0 for i in range(0, 28)])
+                 0 for i in range(0, 29)])
     cursor.execute("INSERT OR REPLACE INTO users VALUES {}".format(row))
     connection.commit()
     connection.close()
@@ -113,7 +113,7 @@ def getRow(flat, square, dist, reg, price, offset):
         rd = datetime.strptime(row[7], '%Y-%m-%d %H:%M:%S')
         if rd > tda:
             rows.append([i for i in row])
-    random.shuffle(rows)
+    # random.shuffle(rows)
     connection.close()
     if len(rows) > 0:
         return rows[offset], len(rows)
@@ -287,7 +287,7 @@ def message(m: Message):
             update_db(userid, ['szao'], [1])
         elif m.text == 'НАО (Новомосковский)':
             update_db(userid, ['nao'], [1])
-        elif m.text == 'Любой округ':
+        elif m.text == 'Далее ➡':
             update_db(userid, properties=['stage'], values=['square'])
             # txt = 'Вы выбрали: ' + getFilterText.regtext(cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao)
             log = '%s User %s @%s %s %s selected reg: %s %s %s %s %s %s %s %s %s %s' % (
@@ -547,7 +547,7 @@ def selectflat(m: Message, flat, userid, firstname, lastname, username):
     out = ('Пользователь ' +
            str(firstname) + ' ' +
            str(lastname) + ' @' +
-           str(username) + " выбрал квартиру:\nID %s" % flat[0] + a)
+           str(username) + " выбрал квартиру:\n" + a)
     bot.send_message(433242252, out)  # я
     # bot.send_message(318453750, out)
     # bot.send_message(318453750, out) ne robit
