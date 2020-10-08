@@ -66,7 +66,7 @@ def changedist(vco, tco, tt, ztk):
 
 
 def changereg(cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao):
-    path = r'C:\Users\Veleslav\Downloads\Telegram Desktop\data-6467-2020-08-25.csv'
+    path = 'metro_mapping.csv'
     f = open(path)
     reader = csv.reader(f, delimiter=';')
     dist = []
