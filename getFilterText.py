@@ -88,9 +88,6 @@ def roomtext(r1, r2, r3, r4):
     return txt
 
 
-import message_handler as mh
-
-
 def regtext(cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao):
     txt = ''
     if cao:

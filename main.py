@@ -2,7 +2,6 @@ import telebot
 from telebot import apihelper
 from telebot import types
 from telebot.types import Message, CallbackQuery
-from telebot.types import Document
 
 from const import *
 from menu import Keyboard
@@ -16,32 +15,10 @@ import random
 import getRowOperands
 import getFilterText
 import actions
-import message_handler as mh
 
 bot = telebot.TeleBot(token=TOKEN, threaded=False)
 apihelper.proxy = {'socks5': PROXY}
 logging.basicConfig(filename='tgbot.log', level=logging.INFO)
-
-
-# chat id 433242252 Royal Goose
-
-# stages = ['main', 'room', 'dist', 'reg', 'square', 'price', 'first_show', 'show']
-# stage = None
-# rooms = []  # количество комнат
-# square = False  # площадь
-# choice = 0  # номер выдачи
-# dist = False  # расстояние от центра
-# reg = False  # АО
-# price = False  # цена
-# flat = ''  # количество комнат
-# rcount = ''  # счетчик строк
-# a = ''
-# userid = ''
-# firstname = ''
-# lastname = ''
-# username = ''
-# flag = ''
-# selected_flats = ''  # выбранная квартира
 
 
 def init_user(ui, f, l, un):
@@ -66,7 +43,6 @@ def update_db(ui, properties, values):
     connection = sqlite3.connect('users.db')
     cursor = connection.cursor()
     ex = "UPDATE users SET {} WHERE user_id = {}".format(req, ui)
-    # print(ex)
     cursor.execute(ex)
     connection.commit()
     connection.close()
@@ -130,11 +106,6 @@ def getRow(flat, square, dist, reg, price, offset):
     td = timedelta(2)
     tda = now - td
 
-    # onex = "SELECT * FROM Flats {} WHERE Created > {} ORDER BY RANDOM() LIMIT 1 OFFSET {}".format(request, tda, offset)
-    # allx = "SELECT * FROM Flats {} WHERE Created > {}".format(request, tda)
-    # rows = [i for i in cursor.execute(final)]
-    # row = [i for i in cursor.execute(onex).fetchone()]
-    # rows = [i for i in cursor.execute(allx).fetchall()]
     exe = "SELECT * FROM flats {}".format(request)
     rare_rows = cursor.execute(exe).fetchall()
     rows = []
@@ -165,21 +136,6 @@ def start(m: Message):
                                                  userid, username, firstname, lastname)
     logging.info(log)
     print(log)
-    # print("chatid: " + str(m.chat.id) +
-    #       " ;userid: " + str(m.from_user.id) +
-    #       " ;firstname: " + str(m.from_user.first_name) +
-    #       " ;lastname: " + str(m.from_user.last_name) +
-    #       " ;username: " + str(m.from_user.username))
-
-
-# @bot.message_handler(commands=["chat"])
-def inline(m: Message):
-    key = types.InlineKeyboardMarkup()
-    but_1 = types.InlineKeyboardButton(text="NumberOne", callback_data="NumberOne")
-    but_2 = types.InlineKeyboardButton(text="NumberTwo", callback_data="NumberTwo")
-    but_3 = types.InlineKeyboardButton(text="NumberTree", callback_data="NumberTree")
-    key.add(but_1, but_2, but_3)
-    bot.send_message(m.chat.id, "ВЫБЕРИТЕ КНОПКУ", reply_markup=key)
 
 
 @bot.callback_query_handler(func=lambda c: True)
@@ -199,7 +155,7 @@ def inline(c: CallbackQuery):
     square = (minsq, maxsq)
     price = (minp, maxp)
     flat, rcount = getRow(rooms, square, dist, reg, price, choice)
-    if c.data == 'NumberOne':
+    '''if c.data == 'NumberOne':
         bot.send_message(c.message.chat.id, 'Это кнопка 1')
     if c.data == 'NumberTwo':
         bot.send_message(c.message.chat.id, 'Это кнопка 2')
@@ -209,7 +165,7 @@ def inline(c: CallbackQuery):
         but_2 = types.InlineKeyboardButton(text="NumberTwo", callback_data="NumberTwo")
         but_3 = types.InlineKeyboardButton(text="NumberTree", callback_data="NumberTree")
         key.add(but_1, but_2, but_3)
-        bot.send_message(c.message.chat.id, 'Это кнопка 3', reply_markup=key)
+        bot.send_message(c.message.chat.id, 'Это кнопка 3', reply_markup=key)'''
     if c.data == "Контакты 📞":
         bot.send_message(c.message.chat.id, 'О нас')
     if rcount > 0:
@@ -221,13 +177,11 @@ def inline(c: CallbackQuery):
 
 @bot.message_handler(content_types=['text'])
 def message(m: Message):
-    # global stage, rooms, square, choice, flat, dist, reg, price, a, rcount, userid, firstname, lastname, username, flag, selected_flats
     chatid = m.chat.id
     userid = m.from_user.id
     firstname = m.from_user.first_name
     lastname = m.from_user.last_name
     username = m.from_user.username
-    # print(userid, stage, m.text)
     con = sqlite3.connect('users.db')
     cur = con.cursor()
     ans = [j for i in cur.execute('SELECT * FROM users WHERE user_id = {}'.format(userid)) for j in i]
@@ -245,15 +199,11 @@ def message(m: Message):
                                                           userid, username, firstname, lastname)
         logging.info(log)
         print(log)
-        stage = 'room'
         init_user(userid, firstname, lastname, username)
         update_db(userid, properties=['stage', 'offset'], values=['room', 0])
-        # print(stage)
-        choice = 0
         Keyboard.select_room(m)
 
     elif m.text == 'Скачать':
-        stage = 'download'
         f = open(r'X:\pdfs\403276986.pdf', "rb")
         bot.send_chat_action(m.chat.id, action='upload_document')
         bot.send_document(m.chat.id, f)
@@ -262,8 +212,6 @@ def message(m: Message):
         log = '%s User %s @%s %s %s back to menu' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
                                                      userid, username, firstname, lastname)
         logging.info(log)
-        mh.clr()
-        stage = 'main'
         init_user(userid, firstname, lastname, username)
         update_db(userid, ['stage'], ['main'])
         Keyboard.main_menu(m)
@@ -272,29 +220,14 @@ def message(m: Message):
         if m.text == 'Студия':
             update_db(userid, ['r1'], [-1])
         if m.text == '1 комната':
-            mh.glb['r']['r1'] = True
             update_db(userid, ['r1'], [1])
-            r1 = 1
         elif m.text == '2 комнаты':
-            mh.glb['r']['r2'] = True
             update_db(userid, ['r2'], [1])
-            r2 = 1
         elif m.text == '3 комнаты':
-            mh.glb['r']['r3'] = True
             update_db(userid, ['r3'], [1])
-            r3 = 1
         elif m.text == '4 и более':
-            mh.glb['r']['r4'] = True
             update_db(userid, ['r4'], [1])
-            r4 = 1
-        # elif m.text == 'Любое':
-        #     mh.glb['r']['rany'] = True
         elif m.text == 'Далее ➡':
-            # rooms = actions.changerooms(mh.glb['r']['r1'],
-            #                             mh.glb['r']['r2'],
-            #                             mh.glb['r']['r3'],
-            #                             mh.glb['r']['r4'],
-            #                             mh.glb['r']['rany'])
             txt = 'Вы выбрали: ' + getFilterText.roomtext(r1, r2, r3, r4)
             log = '%s User %s @%s %s %s selected room: %s %s %s %s' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
                                                                        userid, username, firstname, lastname,
@@ -302,24 +235,12 @@ def message(m: Message):
             logging.info(log)
             # bot.send_chat_action(m.chat.id, action="typing")
             # bot.send_message(m.chat.id, txt)
-            stage = 'dist'
             update_db(userid, properties=['stage'], values=['dist'])
-            # print(stage)
             Keyboard.select_dist(m)
         else:
             bot.send_chat_action(m.chat.id, action="typing")
             txt = 'Пожалуйста, выберите один из пунктов меню и нажмите "Далее"'
             bot.send_message(m.chat.id, txt)
-    # elif ((m.text == '1 комната') |
-    #       (m.text == '2 комнаты') |
-    #       (m.text == '3 комнаты') |
-    #       (m.text == '4 и более') |
-    #       (m.text == 'Любое') |
-    #       (m.text == 'Далее ➡')):
-    #     stage = 'dist'
-    #     rooms.append(actions.changerooms(m))
-    #     if m.text == 'Далее ➡':
-    #         Keyboard.select_dist(m)
 
     elif stage == 'dist':
         if m.text == 'Внутри кольцевой':
@@ -334,7 +255,6 @@ def message(m: Message):
         elif m.text == 'До 5 станций от кольца':
             update_db(userid, ['ztk'], [1])
             ztk = 1
-        stage = 'reg'
         update_db(userid, properties=['stage'], values=['reg'])
         dist = getFilterText.getdist(vco, tco, ttk, ztk)
         log = '%s User %s @%s %s %s selected dist: %s %s %s %s' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
@@ -350,59 +270,27 @@ def message(m: Message):
 
     elif stage == 'reg':
         if m.text == 'ЦАО ⏺':
-            mh.glb['rg']['cao'] = True
             update_db(userid, ['cao'], [1])
-            cao = 1
         elif m.text == 'САО ⬆':
-            mh.glb['rg']['sao'] = True
             update_db(userid, ['sao'], [1])
-            sao = 1
         elif m.text == '↗ СВАО':
-            mh.glb['rg']['svao'] = True
             update_db(userid, ['svao'], [1])
-            svao = 1
         elif m.text == '➡ ВАО':
-            mh.glb['rg']['vao'] = True
             update_db(userid, ['vao'], [1])
-            vao = 1
         elif m.text == '↘ ЮВАО':
-            mh.glb['rg']['uvao'] = True
             update_db(userid, ['uvao'], [1])
-            uvao = 1
         elif m.text == 'ЮАО ⬇':
-            mh.glb['rg']['uao'] = True
             update_db(userid, ['uao'], [1])
-            uao = 1
         elif m.text == 'ЮЗАО ↙':
-            mh.glb['rg']['uzao'] = True
             update_db(userid, ['uzao'], [1])
-            uzao = 1
         elif m.text == 'ЗАО ⬅':
-            mh.glb['rg']['zao'] = True
             update_db(userid, ['zao'], [1])
-            zao = 1
         elif m.text == 'СЗАО ↖':
-            mh.glb['rg']['szao'] = True
             update_db(userid, ['szao'], [1])
-            szao = 1
         elif m.text == 'НАО (Новомосковский)':
-            mh.glb['rg']['nao'] = True
             update_db(userid, ['nao'], [1])
-            nao = 1
         elif m.text == 'Любой округ':
-            stage = 'square'
             update_db(userid, properties=['stage'], values=['square'])
-            # reg = actions.changereg(mh.glb['rg']['cao'],
-            #                         mh.glb['rg']['sao'],
-            #                         mh.glb['rg']['svao'],
-            #                         mh.glb['rg']['vao'],
-            #                         mh.glb['rg']['uvao'],
-            #                         mh.glb['rg']['uao'],
-            #                         mh.glb['rg']['uzao'],
-            #                         mh.glb['rg']['zao'],
-            #                         mh.glb['rg']['szao'],
-            #                         mh.glb['rg']['nao'],
-            #                         mh.glb['rg']['rgany'])
             # txt = 'Вы выбрали: ' + getFilterText.regtext(cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao)
             log = '%s User %s @%s %s %s selected reg: %s %s %s %s %s %s %s %s %s %s' % (
             datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
@@ -425,11 +313,6 @@ def message(m: Message):
             bot.send_message(m.chat.id, txt)
 
     elif stage == 'square':
-        # if m.text == 'Менее 50 м²':
-        #  (m.text == '50-100 м²') |
-        #  (m.text == '100-200 м²') |
-        #  (m.text == 'Более 200 м²') |
-        #  (m.text == 'Любая площадь 🌍'))):
         if m.text != 'Далее ➡':
             if minsq == 0:
                 try:
@@ -457,7 +340,6 @@ def message(m: Message):
                     # bot.send_message(m.chat.id, txt)
                     Keyboard.select_price(m, True)
         else:
-            stage = 'price'
             update_db(userid, properties=['stage'], values=['price'])
             # txt = 'Вы выбрали: ' + getFilterText.sqtext(0)
             log = '%s User %s @%s %s %s selected any square' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"), userid,
@@ -470,12 +352,6 @@ def message(m: Message):
             Keyboard.select_price(m, True)
 
     elif stage == 'price':
-        # ((m.text == '<30 тыс. руб') |
-        #  (m.text == '30-50 тыс. руб') |
-        #  (m.text == '50-100 тыс. руб') |
-        #  (m.text == '>100 тыс. руб') |
-        #  (m.text == 'Любая цена 💰'))):
-        # print(m.text != 'Далее ➡', minp != -1, maxp != -1)
         if m.text != 'Далее ➡':  # or minp != -1 or maxp != -1:
             if minp == 0:
                 try:
@@ -504,7 +380,6 @@ def message(m: Message):
                     if pr == 0:
                         pr = -1
                     if minp < pr:
-                        stage = 'first_show'
                         '''text = getFilterText.ffilter(r1, r2, r3, r4,
                                                      vco, tco, ttk, ztk,
                                                      cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao,
@@ -524,7 +399,6 @@ def message(m: Message):
                         bot.send_message(m.chat.id, txt)
                         Keyboard.select_price(m, True)
         else:
-            stage = 'first_show'
             update_db(userid, properties=['stage'], values=['first_show'])
             '''text = getFilterText.ffilter(r1, r2, r3, r4,
                                          vco, tco, ttk, ztk,
@@ -540,7 +414,6 @@ def message(m: Message):
             Keyboard.show_menu_first(m)
 
     elif stage == 'first_show':  # m.text == 'Показать результат ⬆':
-        stage = 'show'
         rooms = actions.changerooms(r1, r2, r3, r4)
         dist = actions.changedist(vco, tco, ttk, ztk)
         reg = actions.changereg(cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao)
@@ -561,10 +434,6 @@ def message(m: Message):
             update_db(userid, properties=['stage'], values=['room'])
 
     elif stage == 'show':  # m.text == 'Показать результат ⤴' or m.text == '◀ Предыдущая' or m.text == 'Следующая ▶' or m.text == 'Выбрать ✅':
-        flag = 1
-        # if selected_flats == 0:
-        #     Keyboard.norows(m)
-        # else:
         rooms = actions.changerooms(r1, r2, r3, r4)
         dist = actions.changedist(vco, tco, ttk, ztk)
         reg = actions.changereg(cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao)
@@ -596,7 +465,6 @@ def message(m: Message):
                     bot.send_message(m.chat.id, text)
 
     elif m.text == 'Задать вопрос ❓':
-        stage = 'question'
         update_db(userid, properties=['stage'], values=['question'])
         bot.send_chat_action(m.chat.id, action="typing")
         bot.send_message(m.chat.id, 'Какой у вас вопрос?')
@@ -605,7 +473,6 @@ def message(m: Message):
         logging.info(log)
 
     elif m.text == 'О нас 📝':
-        stage = 'about'
         bot.send_chat_action(m.chat.id, action="typing")
         bot.send_message(m.chat.id, 'Скоро здесь появится информация')
         log = '%s User %s @%s %s %s pressed "about"' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
@@ -613,24 +480,12 @@ def message(m: Message):
         logging.info(log)
 
     elif m.text == 'Контакты 📞':
-        stage = 'contacts'
-        # key = types.InlineKeyboardMarkup()
-        # but_1 = types.InlineKeyboardButton(text="NumberOne", callback_data="NumberOne")
-        # but_2 = types.InlineKeyboardButton(text="NumberTwo", callback_data="NumberTwo")
-        # but_3 = types.InlineKeyboardButton(text="NumberTree", callback_data="NumberTree")
-        # key.add(but_1, but_2, but_3)
-        # bot.send_chat_action(m.chat.id, action="typing")
-        # bot.send_message(m.chat.id, 'Тут контакты', reply_markup=key)
         log = '%s User %s @%s %s %s pressed "contacts"' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
             userid, username, firstname, lastname)
         logging.info(log)
         InlineKeyboard.box(m)
 
-    elif m.text == 'Назад':
-        stage = 'back'
-        kek = 1
     elif stage == 'question':
-        stage = 'error'
         update_db(userid, properties=['stage'], values=['main'])
         out = ('Пользователь ' +
                str(firstname) + ' ' +
@@ -651,7 +506,6 @@ def message(m: Message):
 
 
 def showflat(m: Message, flat, choice, rcount):
-    # global rooms, square, choice, flat, dist, price, a, rcount, userid, firstname, lastname, username, flag
     art = str(flat[0])
     r = str(flat[2])
     s = str(flat[1])
