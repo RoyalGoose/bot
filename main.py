@@ -8,6 +8,7 @@ from menu import Keyboard
 from menu import InlineKeyboard
 
 from datetime import datetime, timedelta
+from threading import Thread
 import time
 import sqlite3
 import logging
@@ -558,6 +559,14 @@ def selectflat(m: Message, flat, userid, firstname, lastname, username):
     bot.send_message(m.chat.id, out)
 
 
+def send_action(id, ac):
+    bot.send_chat_action(id, action=ac)
+
+
+def send_doc(id, f, mar, cap):
+    bot.send_document(id, f, reply_markup=mar, caption=cap)
+
+    
 def send_pdf(m: Message, flat, a, key):
     flat_id = flat[0]
     lat = str(flat[5])[:-2]
@@ -565,8 +574,12 @@ def send_pdf(m: Message, flat, a, key):
     lon = str(flat[6])[:-2]
     lon = float(lon[:2] + '.' + lon[2:])
     f = open(PDF_PATH + '/%s.pdf' % flat_id, "rb")
-    bot.send_chat_action(m.chat.id, action='upload_document')
-    bot.send_document(m.chat.id, f, reply_markup=key, caption=a)  # , caption='Презентация %s' % flat_id)
+    # bot.send_chat_action(m.chat.id, action='upload_document')
+    # bot.send_document(m.chat.id, f, reply_markup=key, caption=a)  # , caption='Презентация %s' % flat_id)
+    Thread(target=send_action, args=(m.chat.id, 'upload_document')).start()
+    Thread(target=send_doc, args=(m.chat.id, f, key, a)).start()
+
+
     # bot.send_chat_action(m.chat.id, action='find_location')
     # bot.send_location(m.chat.id, latitude=lat, longitude=lon)
 
