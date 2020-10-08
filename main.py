@@ -135,7 +135,6 @@ def start(m: Message):
     log = '%s User %s @%s %s %s started work' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
                                                  userid, username, firstname, lastname)
     logging.info(log)
-    print(log)
 
 
 @bot.callback_query_handler(func=lambda c: True)
@@ -198,7 +197,6 @@ def message(m: Message):
         log = '%s User %s @%s %s %s started searching' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
                                                           userid, username, firstname, lastname)
         logging.info(log)
-        print(log)
         init_user(userid, firstname, lastname, username)
         update_db(userid, properties=['stage', 'offset'], values=['room', 0])
         Keyboard.select_room(m)
@@ -577,6 +575,5 @@ while True:
     try:
         bot.polling(none_stop=True, interval=1, timeout=20)
     except Exception as E:
-        print(E)
         logging.critical(E)
         time.sleep(2)
