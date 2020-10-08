@@ -6,73 +6,106 @@ from telebot.types import Message
 from const import TOKEN
 from const import PROXY
 
+import csv
+
 bot = telebot.TeleBot(token=TOKEN, threaded=False)
 apihelper.proxy = {'https': PROXY}
 
 
-def changerooms(m: Message):
-    if m.text == '1 комната':
-        rooms = 1
-    if m.text == '2 комнаты':
-        rooms = 2
-    if m.text == '3 комнаты':
-        rooms = 3
-    if m.text == '4 и более':
-        rooms = 4
-    # if m.text == 'Любое количество комнат 🏢':
-    #     rooms = 4
+def changerooms(r1, r2, r3, r4):
+    rooms = []
+    if r1 == -1:
+        rooms.append(0)
+    if r1 and r1 != -1:
+        rooms.append(1)
+    if r2:
+        rooms.append(2)
+    if r3:
+        rooms.append(3)
+    if r4:
+        rooms.append(4)
+    if len(rooms) == 0:
+        return []
     return rooms
 
 
-def changedist(m: Message):
-    if m.text == 'ЦАО ⏺':
-        dist = 'ЦАО'
-    if m.text == 'САО ⬆':
-        dist = 'САО'
-    if m.text == '↗ СВАО':
-        dist = 'СВАО'
-    if m.text == '➡ ВАО':
-        dist = 'ВАО'
-    if m.text == '↘ ЮВАО':
-        dist = 'ЮВАО'
-    if m.text == 'ЮАО ⬇':
-        dist = 'ЮАО'
-    if m.text == 'ЮЗАО ↙':
-        dist = 'ЮЗАО'
-    if m.text == 'ЗАО ⬅':
-        dist = 'ЗАО'
-    if m.text == 'СЗАО ↖':
-        dist = 'СЗАО'
-    if m.text == 'НАО (Новомосковский)':
-        dist = 'НАО'
-    if m.text == 'Любой 🔀':
-        dist = 'Any'
-    return dist
+def changedist(vco, tco, tt, ztk):
+    path = r'C:\Users\Veleslav\Downloads\metro.csv'
+    f = open(path, encoding='UTF-8')
+    reader = csv.reader(f, delimiter=';')
+    kcv = ['кольцо']
+    toc = ['3кольца']
+    ttk = ['ттк']
+    pst = ['зттк']
+    for i, row in enumerate(reader):
+        if i > 1:
+            if row[0] != '':
+                kcv.append(row[0].lower().capitalize())
+                toc.append(row[0].lower().capitalize())
+                ttk.append(row[0].lower().capitalize())
+                pst.append(row[0].lower().capitalize())
+            if row[2] != '':
+                toc.append(row[2].lower().capitalize())
+                ttk.append(row[2].lower().capitalize())
+                pst.append(row[2].lower().capitalize())
+            if row[4] != '':
+                ttk.append(row[4].lower().capitalize())
+                pst.append(row[4].lower().capitalize())
+            if row[6] != '':
+                pst.append(row[6].lower().capitalize())
+    if vco:
+        return kcv
+    elif tco:
+        return toc
+    elif tt:
+        return ttk
+    elif ztk:
+        return pst
+    else:
+        return 'Any'
 
 
-def changesqure(m: Message):
-    if m.text == 'Менее 50 м²':
-        square = 50
-    if m.text == '50-100 м²':
-        square = 100
-    if m.text == '100-200 м²':
-        square = 200
-    if m.text == 'Более 200 м²':
-        square = 201
-    if m.text == 'Любая площадь 🌍':
-        square = 202
-    return square
+def changereg(cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao):
+    path = r'C:\Users\Veleslav\Downloads\Telegram Desktop\data-6467-2020-08-25.csv'
+    f = open(path)
+    reader = csv.reader(f, delimiter=';')
+    dist = []
+    if cao:
+        dist.append('Центральный административный округ')
+    if sao:
+        dist.append('Северный административный округ')
+    if svao:
+        dist.append('Северо-Восточный административный округ')
+    if vao:
+        dist.append('Восточный административный округ')
+    if uvao:
+        dist.append('Юго-Восточный административный округ')
+    if uao:
+        dist.append('Южный административный округ')
+    if uzao:
+        dist.append('Юго-Западный административный округ')
+    if zao:
+        dist.append('Западный административный округ')
+    if szao:
+        dist.append('Северо-Западный административный округ')
+    if nao:
+        dist.append('Новомосковский административный округ')
+    if len(dist) == 0:
+        return 'Any'
+    reg = []
+    for row in reader:
+        if row[2] in dist:
+            reg.append(row[0])
+    return reg
 
 
-def changeprice(m: Message):
-    if m.text == '<30 тыс. руб':
-        price = 30
-    if m.text == '30-50 тыс. руб':
-        price = 40
-    if m.text == '50-100 тыс. руб':
-        price = 75
-    if m.text == '>100 тыс. руб':
-        price = 100
-    if m.text == 'Любая цена 💰':
-        price = 101
-    return price
+'''
+def changesqure(min, max):
+    if (min == 0) & (max == 0):
+        return 'Any'
+    else:
+        return min, max
+
+def changeprice(min, max):
+    return min, max
+'''
