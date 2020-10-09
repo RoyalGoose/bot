@@ -23,9 +23,9 @@ class Keyboard:
     def select_room(m):
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(*[types.KeyboardButton(name) for name in ['Студия', '1 комната']])
-        keyboard.add(*[types.KeyboardButton(name) for name in ['2 комнаты', '3 комнаты']])
+        keyboard.add(*[types.KeyboardButton(name) for name in ['2 комнаты', '3 комнаты', '4 и более']])
         # keyboard.add(*[types.KeyboardButton(name) for name in ['Любое количество комнат 🏢']])
-        keyboard.add(*[types.KeyboardButton(name) for name in ['4 и более', 'Далее ➡']])
+        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Далее ➡']])
         bot.send_chat_action(m.chat.id, action="typing")
         bot.send_message(m.chat.id, 'Выберите количество комнат и нажмите "Далее" (один или несколько вариантов)',
                          reply_markup=keyboard)
@@ -36,7 +36,7 @@ class Keyboard:
         # keyboard.add(*[types.KeyboardButton(name) for name in []])
         keyboard.add(*[types.KeyboardButton(name) for name in ['Внутри ТТК', 'До 5 станций от кольца']])
         # keyboard.add(*[types.KeyboardButton(name) for name in []])
-        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Любая станция']])
+        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Любая станция ➡']])
         bot.send_chat_action(m.chat.id, action="typing")
         bot.send_message(m.chat.id, 'Выберите максимальное расстояние от центра', reply_markup=keyboard)
 
