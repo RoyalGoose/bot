@@ -456,6 +456,7 @@ def message(m: Message):
                 if choice < rcount - 1:
                     choice += 1
                     update_db(userid, properties=['offset'], values=[choice])
+                    flat, rcount = getRow(rooms, square, dist, reg, price, choice)
                     log = 'User %s @%s %s %s pressed "next"' % (userid, username, firstname, lastname)
                     slog('info', log)
                     showflat(m, flat, choice, rcount)
