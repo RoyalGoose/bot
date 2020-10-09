@@ -67,7 +67,7 @@ def changedist(vco, tco, tt, ztk):
 
 def changereg(cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao):
     path = 'metro_mapping.csv'
-    f = open(path)
+    f = open(path, encoding='cp1251')
     reader = csv.reader(f, delimiter=';')
     dist = []
     if cao:
