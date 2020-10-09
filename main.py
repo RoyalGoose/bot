@@ -51,13 +51,16 @@ def update_db(ui, properties, values):
 
 
 def slog(type='info', txt=''):
-    txt = (datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f ") + str(txt)).encode('utf-8').decode('cp1251')
-    if type == 'info':
+    txt = type + datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f ") + str(txt) + '\n'
+    f = open('xyq.log', 'a', encoding='utf-8')
+    f.write(txt)
+    f.close()
+    '''if type == 'info':
         logging.info(txt)
     if type == 'cri':
         logging.critical(txt)
     if type == 'err':
-        logging.error(txt)
+        logging.error(txt)'''
 
 
 def getRow(flat, square, dist, reg, price, offset):
