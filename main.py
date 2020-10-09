@@ -547,6 +547,9 @@ def selectflat(m: Message, flat, userid, firstname, lastname, username):
            str(firstname) + ' ' +
            str(lastname) + ' @' +
            str(username) + " выбрал квартиру:\n" + a)
+    log = 'User %s %s %s %s selected flat id %s, r %s, s %s, d %s, p %s' % (userid, firstname,lastname,
+                                                                            username, art, r, s, d, p)
+    slog('info', log)
     bot.send_message(433242252, out)  # я
     bot.send_message(318453750, out)  # median admin
     out = ("Вы выбрали:\n"
