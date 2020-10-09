@@ -20,8 +20,6 @@ import actions
 
 bot = telebot.TeleBot(token=TOKEN, threaded=False)
 apihelper.proxy = {'socks5': PROXY}
-logging.basicConfig(filename='tgbot.log', level=logging.INFO)
-
 
 def init_user(ui, f, l, un):
     connection = sqlite3.connect('users.db')
@@ -52,15 +50,9 @@ def update_db(ui, properties, values):
 
 def slog(type='info', txt=''):
     txt = type + datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f ") + str(txt) + '\n'
-    f = open('xyq.log', 'a', encoding='utf-8')
+    f = open('bot.log', 'a', encoding='utf-8')
     f.write(txt)
     f.close()
-    '''if type == 'info':
-        logging.info(txt)
-    if type == 'cri':
-        logging.critical(txt)
-    if type == 'err':
-        logging.error(txt)'''
 
 
 def getRow(flat, square, dist, reg, price, offset):
