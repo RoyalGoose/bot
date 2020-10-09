@@ -51,7 +51,7 @@ def update_db(ui, properties, values):
 
 
 def slog(type='info', txt=''):
-    txt = datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f ") + txt
+    txt = datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f ") + str(txt)
     print(txt)
     if type == 'info':
         logging.info(txt.encode('utf-8').decode('cp1251'))
