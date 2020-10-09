@@ -21,6 +21,7 @@ import actions
 bot = telebot.TeleBot(token=TOKEN, threaded=False)
 apihelper.proxy = {'socks5': PROXY}
 
+
 def init_user(ui, f, l, un):
     connection = sqlite3.connect('users.db')
     cursor = connection.cursor()
@@ -580,8 +581,8 @@ def send_pdf(m: Message, flat, a, key):
 
 
 while True:
-    # try:
-    bot.polling(none_stop=True, interval=1, timeout=20)
-    # except Exception as E:
-    #     slog('cri', E)
-    #     time.sleep(2)
+    try:
+        bot.polling(none_stop=True, interval=1, timeout=20)
+    except Exception as E:
+        slog('cri', E)
+        time.sleep(2)
