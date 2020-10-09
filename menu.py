@@ -36,7 +36,7 @@ class Keyboard:
         # keyboard.add(*[types.KeyboardButton(name) for name in []])
         keyboard.add(*[types.KeyboardButton(name) for name in ['Внутри ТТК', 'До 5 станций от кольца']])
         # keyboard.add(*[types.KeyboardButton(name) for name in []])
-        keyboard.add(*[types.KeyboardButton(name) for name in ['Вернутся в меню ↩', 'Любая станция']])
+        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Любая станция']])
         bot.send_chat_action(m.chat.id, action="typing")
         bot.send_message(m.chat.id, 'Выберите максимальное расстояние от центра', reply_markup=keyboard)
 
@@ -46,7 +46,7 @@ class Keyboard:
         keyboard.add(*[types.KeyboardButton(name) for name in ['ЗАО ⬅', 'ЦАО ⏺', '➡ ВАО']])
         keyboard.add(*[types.KeyboardButton(name) for name in ['ЮЗАО ↙', 'ЮАО ⬇', '↘ ЮВАО']])
         keyboard.add(*[types.KeyboardButton(name) for name in ['НАО (Новомосковский)', 'Далее ➡']])  # 'Любой 🔀'
-        keyboard.add(*[types.KeyboardButton(name) for name in ['Вернутся в меню ↩']])
+        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩']])
         bot.send_chat_action(m.chat.id, action="typing")
         bot.send_message(m.chat.id, 'Выберите административный округ (один или несколько вариантов)',
                          reply_markup=keyboard)
@@ -56,7 +56,7 @@ class Keyboard:
         # keyboard.add(*[types.KeyboardButton(name) for name in ['Менее 50 м²', '50-100 м²']])
         # keyboard.add(*[types.KeyboardButton(name) for name in ['100-200 м²', 'Более 200 м²']])
         # keyboard.add(*[types.KeyboardButton(name) for name in ['Любая площадь 🌍']])
-        keyboard.add(*[types.KeyboardButton(name) for name in ['Вернутся в меню ↩', 'Далее ➡']])
+        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Далее ➡']])
         bot.send_chat_action(m.chat.id, action="typing")
         if f:
             txt = 'Введите минимальную желаемую площадь в м², пример: 54'
@@ -69,7 +69,7 @@ class Keyboard:
         # keyboard.add(*[types.KeyboardButton(name) for name in ['<30 тыс. руб', '30-50 тыс. руб']])
         # keyboard.add(*[types.KeyboardButton(name) for name in ['50-100 тыс. руб', '>100 тыс. руб']])
         # keyboard.add(*[types.KeyboardButton(name) for name in ['Любая цена 💰']])
-        keyboard.add(*[types.KeyboardButton(name) for name in ['Вернутся в меню ↩', 'Далее ➡']])
+        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Далее ➡']])
         bot.send_chat_action(m.chat.id, action="typing")
         if f:
             txt = 'Введите минимальную цену аренды руб./мес., пример 35000'
@@ -80,7 +80,7 @@ class Keyboard:
     def show_menu_first(m):
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         #keyboard.add(*[types.KeyboardButton(name) for name in []])
-        keyboard.add(*[types.KeyboardButton(name) for name in ['Вернутся в меню ↩', 'Показать результат ⬆']])
+        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Показать результат ⬆']])
         bot.send_chat_action(m.chat.id, action='typing')
         bot.send_message(m.chat.id, 'Сейчас я подготовлю для вас подходящий список недвижимости', reply_markup=keyboard)
 
