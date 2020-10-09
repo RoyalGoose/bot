@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import telebot
 from telebot import apihelper
 from telebot import types
@@ -53,7 +54,7 @@ def slog(type='info', txt=''):
     txt = datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f ") + txt
     print(txt)
     if type == 'info':
-        logging.info(txt)
+        logging.info(txt.encode('utf-8').decode('cp1251'))
     if type == 'cri':
         logging.critical(txt)
     if type == 'err':
@@ -135,7 +136,6 @@ def start(m: Message):
     update_db(userid, ['stage'], ['main'])
     Keyboard.main_menu(m)
     log = 'User %s @%s %s %s started work' % (userid, username, firstname, lastname)
-    # logging.info(log)
     slog('info', log)
 
 
@@ -196,9 +196,8 @@ def message(m: Message):
         19], ans[20], ans[21], ans[22]
     minsq, maxsq, minp, maxp, choice = ans[23], ans[24], ans[25], ans[26], ans[27]
     if m.text == 'Найти недвижимость 🔎':
-        log = '%s User %s @%s %s %s started searching' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-                                                          userid, username, firstname, lastname)
-        logging.info(log)
+        log = 'User %s @%s %s %s started searching' % (userid, username, firstname, lastname)
+        slog('info', log)
         init_user(userid, firstname, lastname, username)
         update_db(userid, properties=['stage', 'offset'], values=['room', 0])
         Keyboard.select_room(m)
@@ -209,9 +208,8 @@ def message(m: Message):
         bot.send_document(m.chat.id, f)
         # bot.send_location(m.chat.id, latitude=55.791410, longitude=37.624480)
     elif m.text == 'Вернутся в меню ↩' or m.text == 'Новый поиск ↩':
-        log = '%s User %s @%s %s %s back to menu' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-                                                     userid, username, firstname, lastname)
-        logging.info(log)
+        log = 'User %s @%s %s %s back to menu' % (userid, username, firstname, lastname)
+        slog('info', log)
         init_user(userid, firstname, lastname, username)
         update_db(userid, ['stage'], ['main'])
         Keyboard.main_menu(m)
@@ -229,10 +227,9 @@ def message(m: Message):
             update_db(userid, ['r4'], [1])
         elif m.text == 'Далее ➡':
             txt = 'Вы выбрали: ' + getFilterText.roomtext(r1, r2, r3, r4)
-            log = '%s User %s @%s %s %s selected room: %s %s %s %s' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-                                                                       userid, username, firstname, lastname,
-                                                                       r1, r2, r3, r4)
-            logging.info(log)
+            log = 'User %s @%s %s %s selected room: %s %s %s %s' % (userid, username, firstname, lastname,
+                                                                    r1, r2, r3, r4)
+            slog('info', log)
             # bot.send_chat_action(m.chat.id, action="typing")
             # bot.send_message(m.chat.id, txt)
             update_db(userid, properties=['stage'], values=['dist'])
@@ -257,13 +254,12 @@ def message(m: Message):
             ztk = 1
         update_db(userid, properties=['stage'], values=['reg'])
         dist = getFilterText.getdist(vco, tco, ttk, ztk)
-        log = '%s User %s @%s %s %s selected dist: %s %s %s %s' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-                                                                   userid, username, firstname, lastname,
-                                                                   vco,
-                                                                   tco,
-                                                                   ttk,
-                                                                   ztk)
-        logging.info(log)
+        log = 'User %s @%s %s %s selected dist: %s %s %s %s' % (userid, username, firstname, lastname,
+                                                                vco,
+                                                                tco,
+                                                                ttk,
+                                                                ztk)
+        slog('info', log)
         # txt = 'Вы выбрали: ' + dist
         # bot.send_message(m.chat.id, txt)
         Keyboard.select_reg(m)
@@ -292,18 +288,17 @@ def message(m: Message):
         elif m.text == 'Далее ➡':
             update_db(userid, properties=['stage'], values=['square'])
             # txt = 'Вы выбрали: ' + getFilterText.regtext(cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao)
-            log = '%s User %s @%s %s %s selected reg: %s %s %s %s %s %s %s %s %s %s' % (
-            datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-            userid,
-            username,
-            firstname,
-            lastname,
-            cao, sao,
-            svao, vao,
-            uvao, uao,
-            uzao, zao,
-            szao, nao)
-            logging.info(log)
+            log = 'User %s @%s %s %s selected reg: %s %s %s %s %s %s %s %s %s %s' % (
+                userid,
+                username,
+                firstname,
+                lastname,
+                cao, sao,
+                svao, vao,
+                uvao, uao,
+                uzao, zao,
+                szao, nao)
+            slog('info', log)
             # bot.send_chat_action(m.chat.id, action="typing")
             # bot.send_message(m.chat.id, txt)
             Keyboard.select_square(m, True)
@@ -321,8 +316,13 @@ def message(m: Message):
                         raise ValueError
                     if sq > 1000:
                         raise ValueError
-                except:
+                except Exception as e:
                     txt = 'Некорректно задана площадь, введите только число в м². Пример: 54'
+                    log = 'User %s @%s %s %s entered incorrect square, %s' % (userid,
+                                                                        username,
+                                                                        firstname,
+                                                                        lastname, e)
+                    slog('err', log)
                     bot.send_message(m.chat.id, txt)
                     Keyboard.select_square(m, True)
                 else:
@@ -330,23 +330,21 @@ def message(m: Message):
                         sq = -1
                     update_db(userid, ['minsq', 'stage'], [sq, 'price'])
                     # txt = 'Вы выбрали: ' + getFilterText.sqtext(sq)
-                    log = '%s User %s @%s %s %s selected square: %s' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-                        userid,
-                        username,
-                        firstname,
-                        lastname, sq)
-                    logging.info(log)
+                    log = 'User %s @%s %s %s selected square: %s' % (userid,
+                                                                        username,
+                                                                        firstname,
+                                                                        lastname, sq)
+                    slog('info', log)
                     # bot.send_chat_action(m.chat.id, action="typing")
                     # bot.send_message(m.chat.id, txt)
                     Keyboard.select_price(m, True)
         else:
             update_db(userid, properties=['stage'], values=['price'])
             # txt = 'Вы выбрали: ' + getFilterText.sqtext(0)
-            log = '%s User %s @%s %s %s selected any square' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"), userid,
-                                                                                                              username,
-                                                                                                              firstname,
-                                                                                                              lastname)
-            logging.info(log)
+            log = 'User %s @%s %s %s selected any square' % (userid, username,
+                                                                firstname,
+                                                                lastname)
+            slog('info', log)
             # bot.send_chat_action(m.chat.id, action="typing")
             # bot.send_message(m.chat.id, txt)
             Keyboard.select_price(m, True)
@@ -358,8 +356,13 @@ def message(m: Message):
                     pr = int(m.text)
                     if pr < 0:
                         raise ValueError
-                except:
+                except Exception as e:
                     txt = 'Некорректно задана цена, введите только число в рублях. Пример: 35000'
+                    log = 'User %s @%s %s %s entered incorrect min price, %s' % (userid,
+                                                                        username,
+                                                                        firstname,
+                                                                        lastname, e)
+                    slog('err', log)
                     bot.send_message(m.chat.id, txt)
                     Keyboard.select_price(m, True)
                 else:
@@ -372,8 +375,13 @@ def message(m: Message):
                     pr = int(m.text)
                     if pr < 0:
                         raise ValueError
-                except:
+                except Exception as e:
                     txt = 'Некорректно задана цена, введите только число в рублях. Пример: 35000'
+                    log = 'User %s @%s %s %s entered incorrect max price, %s' % (userid,
+                                                                        username,
+                                                                        firstname,
+                                                                        lastname, e)
+                    slog('err', log)
                     bot.send_message(m.chat.id, txt)
                     Keyboard.select_price(m, False)
                 else:
@@ -384,12 +392,12 @@ def message(m: Message):
                                                      vco, tco, ttk, ztk,
                                                      cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao,
                                                      minsq, pr)'''
-                        log = '%s User %s @%s %s %s selected price: %s' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-                            userid,
-                            username,
-                            firstname,
-                            lastname, pr)
-                        logging.info(log)
+                        log = 'User %s @%s %s %s selected price: %s' % (
+                        userid,
+                        username,
+                        firstname,
+                        lastname, pr)
+                        slog('info', log)
                         # bot.send_chat_action(m.chat.id, action="typing")
                         # bot.send_message(m.chat.id, text)
                         Keyboard.show_menu_first(m)
@@ -405,10 +413,10 @@ def message(m: Message):
                                          cao, sao, svao, vao, uvao, uao, uzao, zao, szao, nao,
                                          minsq, minp)'''
             log = 'User %s @%s %s %s selected any price' % (userid,
-                                                                                                             username,
-                                                                                                             firstname,
-                                                                                                             lastname)
-            logging.info(log)
+                                                            username,
+                                                            firstname,
+                                                            lastname)
+            slog('info', log)
             # bot.send_chat_action(m.chat.id, action="typing")
             # bot.send_message(m.chat.id, text)
             Keyboard.show_menu_first(m)
@@ -422,9 +430,8 @@ def message(m: Message):
 
         flat, rcount = getRow(rooms, square, dist, reg, price, choice)
         Keyboard.show_menu(m, rcount)
-        log = '%s User %s @%s %s %s pressed "first show"' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-            userid, username, firstname, lastname)
-        logging.info(log)
+        log = 'User %s @%s %s %s pressed "first show"' % (userid, username, firstname, lastname)
+        slog('info', log)
         if rcount > 0:
             showflat(m, flat, choice, rcount)
             update_db(userid, properties=['stage'], values=['show'])
@@ -442,9 +449,8 @@ def message(m: Message):
         flat, rcount = getRow(rooms, square, dist, reg, price, choice)
         if m.text == 'Выбрать ✅':
             selectflat(m, flat, userid, firstname, lastname, username)
-            log = '%s User %s @%s %s %s pressed "show"' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-                userid, username, firstname, lastname)
-            logging.info(log)
+            log = 'User %s @%s %s %s pressed "show"' % (userid, username, firstname, lastname)
+            slog('info', log)
         else:
             if m.text == '◀ Предыдущая':
                 if choice > 0:
@@ -455,9 +461,8 @@ def message(m: Message):
                 if choice < rcount - 1:
                     choice += 1
                     update_db(userid, properties=['offset'], values=[choice])
-                    log = '%s User %s @%s %s %s pressed "next"' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-                        userid, username, firstname, lastname)
-                    logging.info(log)
+                    log = 'User %s @%s %s %s pressed "next"' % (userid, username, firstname, lastname)
+                    slog('info', log)
                     showflat(m, flat, choice, rcount)
                 else:
                     text = 'Закончились квартиры в выбранном фильтре, нажмите "Новый поиск" для составления нового фильтра'
@@ -468,21 +473,18 @@ def message(m: Message):
         update_db(userid, properties=['stage'], values=['question'])
         bot.send_chat_action(m.chat.id, action="typing")
         bot.send_message(m.chat.id, 'Какой у вас вопрос?')
-        log = '%s User %s @%s %s %s pressed "question"' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-            userid, username, firstname, lastname)
-        logging.info(log)
+        log = 'User %s @%s %s %s pressed "question"' % (userid, username, firstname, lastname)
+        slog('info', log)
 
     elif m.text == 'О нас 📝':
         bot.send_chat_action(m.chat.id, action="typing")
         bot.send_message(m.chat.id, 'Скоро здесь появится информация')
-        log = '%s User %s @%s %s %s pressed "about"' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-            userid, username, firstname, lastname)
-        logging.info(log)
+        log = 'User %s @%s %s %s pressed "about"' % (userid, username, firstname, lastname)
+        slog('info', log)
 
     elif m.text == 'Контакты 📞':
-        log = '%s User %s @%s %s %s pressed "contacts"' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-            userid, username, firstname, lastname)
-        logging.info(log)
+        log = 'User %s @%s %s %s pressed "contacts"' % (userid, username, firstname, lastname)
+        slog('info', log)
         InlineKeyboard.box(m)
 
     elif stage == 'question':
@@ -491,9 +493,8 @@ def message(m: Message):
                str(firstname) + ' ' +
                str(lastname) + ' @' +
                str(username) + " задал вопрос:\n%s" % m.text)
-        log = '%s User %s @%s %s %s asked question: %s' % (datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"),
-            userid, username, firstname, lastname, m.text)
-        logging.info(log)
+        log = 'User %s @%s %s %s asked question: %s' % (userid, username, firstname, lastname, m.text)
+        slog('info', log)
         bot.send_message(433242252, out)
         bot.send_chat_action(m.chat.id, action='typing')
         bot.send_message(m.chat.id,
@@ -580,7 +581,6 @@ def send_pdf(m: Message, flat, a, key):
     Thread(target=send_action, args=(m.chat.id, 'upload_document')).start()
     Thread(target=send_doc, args=(m.chat.id, f, key, a)).start()
 
-
     # bot.send_chat_action(m.chat.id, action='find_location')
     # bot.send_location(m.chat.id, latitude=lat, longitude=lon)
 
@@ -589,5 +589,5 @@ while True:
     try:
         bot.polling(none_stop=True, interval=1, timeout=20)
     except Exception as E:
-        logging.critical(E)
+        slog('cri', E)
         time.sleep(2)
