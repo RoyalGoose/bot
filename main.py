@@ -548,8 +548,7 @@ def selectflat(m: Message, flat, userid, firstname, lastname, username):
            str(lastname) + ' @' +
            str(username) + " выбрал квартиру:\n" + a)
     bot.send_message(433242252, out)  # я
-    # bot.send_message(318453750, out)
-    # bot.send_message(318453750, out) ne robit
+    bot.send_message(318453750, out)  # median admin
     out = ("Вы выбрали:\n"
            + a +
            "\n\nСвяжитесь с нашим риелтором @Azbuka19 для продолжения работы. Он уже оповещен о вашем выборе и готов помочь сию же секунду")
