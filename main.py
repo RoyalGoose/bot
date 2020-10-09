@@ -51,10 +51,9 @@ def update_db(ui, properties, values):
 
 
 def slog(type='info', txt=''):
-    txt = datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f ") + str(txt)
-    print(txt)
+    txt = (datetime.now().strftime(" %d.%m.%Y %H:%M:%S.%f ") + str(txt)).encode('utf-8').decode('cp1251')
     if type == 'info':
-        logging.info(txt.encode('utf-8').decode('cp1251'))
+        logging.info(txt)
     if type == 'cri':
         logging.critical(txt)
     if type == 'err':
@@ -586,8 +585,8 @@ def send_pdf(m: Message, flat, a, key):
 
 
 while True:
-    try:
-        bot.polling(none_stop=True, interval=1, timeout=20)
-    except Exception as E:
-        slog('cri', E)
-        time.sleep(2)
+    # try:
+    bot.polling(none_stop=True, interval=1, timeout=20)
+    # except Exception as E:
+    #     slog('cri', E)
+    #     time.sleep(2)
