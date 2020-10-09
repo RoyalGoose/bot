@@ -212,7 +212,7 @@ def message(m: Message):
     elif stage == 'room':
         if m.text == 'Студия':
             update_db(userid, ['r1'], [-1])
-        if m.text == '1 комната':
+        elif m.text == '1 комната':
             update_db(userid, ['r1'], [1])
         elif m.text == '2 комнаты':
             update_db(userid, ['r2'], [1])

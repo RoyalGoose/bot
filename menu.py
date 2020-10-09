@@ -27,7 +27,7 @@ class Keyboard:
         # keyboard.add(*[types.KeyboardButton(name) for name in ['Любое количество комнат 🏢']])
         keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Далее ➡']])
         bot.send_chat_action(m.chat.id, action="typing")
-        bot.send_message(m.chat.id, 'Выберите количество комнат и нажмите "Далее" (один или несколько вариантов)',
+        bot.send_message(m.chat.id, 'Выберите количество комнат (один или несколько вариантов)',
                          reply_markup=keyboard)
 
     def select_dist(m):
