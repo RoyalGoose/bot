@@ -317,7 +317,7 @@ def message(m: Message):
                                                                         username,
                                                                         firstname,
                                                                         lastname, e)
-                    slog('err', log)
+                    slog('erro', log)
                     bot.send_message(m.chat.id, txt)
                     Keyboard.select_square(m, True)
                 else:
@@ -357,13 +357,13 @@ def message(m: Message):
                                                                         username,
                                                                         firstname,
                                                                         lastname, e)
-                    slog('err', log)
+                    slog('erro', log)
                     bot.send_message(m.chat.id, txt)
                     Keyboard.select_price(m, True)
                 else:
                     if pr == 0:
                         pr = -1
-                    update_db(userid, ['minp', 'stage'], [pr, 'first_show'])
+                    update_db(userid, ['minp'], [pr])
                     Keyboard.select_price(m, False)
             elif maxp == 0:
                 try:
@@ -376,7 +376,7 @@ def message(m: Message):
                                                                         username,
                                                                         firstname,
                                                                         lastname, e)
-                    slog('err', log)
+                    slog('erro', log)
                     bot.send_message(m.chat.id, txt)
                     Keyboard.select_price(m, False)
                 else:
@@ -395,6 +395,7 @@ def message(m: Message):
                         slog('info', log)
                         # bot.send_chat_action(m.chat.id, action="typing")
                         # bot.send_message(m.chat.id, text)
+                        update_db(userid, ['maxp', 'stage'], [pr, 'first_show'])
                         Keyboard.show_menu_first(m)
                     else:
                         update_db(userid, ['minp', 'maxp'], [0, 0])

@@ -110,7 +110,7 @@ class InlineKeyboard:
         key = types.InlineKeyboardMarkup()
         rieltor = types.InlineKeyboardButton(
             text='Риелтор',
-            url='t.me/Azbuka19'
+            url='t.me/medianadmin'
         )
         tg = types.InlineKeyboardButton(
             text='Техподдержка',
