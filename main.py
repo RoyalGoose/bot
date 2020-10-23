@@ -100,17 +100,17 @@ def getRow(flat, square, dist, reg, price, offset):
     connection = sqlite3.connect(DB_PATH)
     cursor = connection.cursor()
 
-    now = datetime.now()
-    td = timedelta(2)
-    tda = now - td
+    # now = datetime.now()
+    # td = timedelta(2)
+    # tda = now - td
 
     exe = "SELECT * FROM flats {}".format(request)
     rare_rows = cursor.execute(exe).fetchall()
     rows = []
     for row in rare_rows:
-        rd = datetime.strptime(row[7], '%Y-%m-%d %H:%M:%S')
-        if rd > tda:
-            rows.append([i for i in row])
+        # rd = datetime.strptime(row[7], '%Y-%m-%d %H:%M:%S')
+        # if rd > tda:
+        rows.append([i for i in row])
     # random.shuffle(rows)
     connection.close()
     if len(rows) > 0:
