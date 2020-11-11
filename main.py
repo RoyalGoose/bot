@@ -555,7 +555,7 @@ def selectflat(m: Message, flat, userid, firstname, lastname, username):
     bot.send_message(318453750, out)  # median admin
     out = ("Вы выбрали:\n"
            + a +
-           "\n\nСвяжитесь с нашим риелтором @Azbuka19 для продолжения работы. Он уже оповещен о вашем выборе и готов помочь сию же секунду")
+           "\n\nСвяжитесь с нашим риелтором @medianadmin для продолжения работы. Он уже оповещен о вашем выборе и готов помочь сию же секунду")
     bot.send_chat_action(m.chat.id, action='typing')
     bot.send_message(m.chat.id, out)
 
