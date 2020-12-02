@@ -539,7 +539,8 @@ def message(m: Message):
                str(username) + " задал вопрос:\n%s" % m.text)
         log = 'User %s @%s %s %s asked question: %s' % (userid, username, firstname, lastname, m.text)
         slog('info', log)
-        bot.send_message(433242252, out)
+        bot.send_message(433242252, out)  # я
+        bot.send_message(318453750, out)  # median
         bot.send_chat_action(m.chat.id, action='typing')
         bot.send_message(m.chat.id,
                          'Ваш вопрос записан и уже рассматривается, можете продолжить пользоватся остальными услугами')
@@ -569,11 +570,11 @@ def showflat(m: Message, flat, choice, rcount):
     p = str(flat[3])
     a = ("Вариант <b>" + str(choice + 1) + " из " + str(rcount) + '</b>\nID квартиры <b>' + art + '</b>')  # + '\n' +
     key = types.InlineKeyboardMarkup()
-    # select_but = types.InlineKeyboardButton(text='Выбрать ✅', callback_data='Select')
+    select_but = types.InlineKeyboardButton(text='Выбрать ✅', callback_data='Select')
     # pdf_but = types.InlineKeyboardButton(text='Презентация', callback_data='pdf')
-    new_but = types.InlineKeyboardButton(text='Новый поиск', callback_data='New')
-    more_but = types.InlineKeyboardButton(text='Еще', callback_data='More')
-    key.add(new_but, more_but)  # , pdf_but)
+    # new_but = types.InlineKeyboardButton(text='Новый поиск', callback_data='New')
+    more_but = types.InlineKeyboardButton(text='Ещё ▶', callback_data='More')
+    key.add(select_but, more_but)  # , pdf_but)
     # bot.send_chat_action(m.chat.id, action='typing')
     # bot.send_message(m.chat.id, a, reply_markup=key)
     send_pdf(m, flat, a, key)
@@ -601,7 +602,7 @@ def selectflat(m: Message, flat, userid, firstname, lastname, username):
                                                                              art, r, s, d, p)
     slog('info', log)
     bot.send_message(433242252, out)  # я
-    # bot.send_message(318453750, out)  # median admin
+    bot.send_message(318453750, out)  # median admin
     out = ("Вы выбрали:\n"
            + a +
            "\n\nСвяжитесь с нашим риелтором @medianadmin для продолжения работы, он уже оповещен о вашем выборе")
