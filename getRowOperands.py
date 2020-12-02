@@ -56,7 +56,7 @@ def getsquare(square):
 
 def getprice(price):
     min, max = price
-    if (min == 0 or min == -1 ) and (max == 0 or max == -1):
+    if (min == 0 or min == -1) and (max == 0 or max == -1):
         return 'Any'
     elif min == 0 or min == -1:
         return 'Price <= {}'.format(max)
@@ -65,5 +65,4 @@ def getprice(price):
     elif (min != 0 or min != -1 ) and (max != 0 or max != -1):
         return 'Price BETWEEN {} AND {}'.format(min, max)
     else:
-        print(min, max, 'else')
-
+        pass
