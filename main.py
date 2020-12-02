@@ -545,7 +545,7 @@ def message(m: Message):
         bot.send_message(m.chat.id,
                          'Ваш вопрос записан и уже рассматривается, можете продолжить пользоватся остальными услугами')
 
-    elif 'хуй' in m.text or 'пизда' in m.text or 'бля' in m.text:
+    elif 'хуй' in m.text.lower() or 'пизда' in m.text.lower() or 'бля' in m.text.lower():
         log = 'User %s @%s %s %s ahyel v krai' % (userid, username, firstname, lastname)
         slog('info', log)
         bot.send_message(m.chat.id, '👁')
