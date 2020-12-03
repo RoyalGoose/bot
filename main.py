@@ -195,7 +195,10 @@ def inline(c: CallbackQuery):
         if c.data == "pdf":
             send_pdf(c.message, flat)
     if c.data == 'New':
-        bot.edit_message_reply_markup(chat_id=userid, message_id=c.message.message_id, reply_markup=None)
+        key = types.InlineKeyboardMarkup()
+        select_but = types.InlineKeyboardButton(text='Выбрать ✅', callback_data='Select')
+        key.add(select_but)
+        bot.edit_message_reply_markup(chat_id=userid, message_id=c.message.message_id, reply_markup=key)
         log = 'User %s @%s %s %s back to menu via inline' % (userid, username, firstname, lastname)
         slog('info', log)
         init_user(userid, firstname, lastname, username)
@@ -210,7 +213,10 @@ def inline(c: CallbackQuery):
         log = 'User %s @%s %s %s pressed "next" via inline' % (userid, username, firstname, lastname)
         slog('info', log)
         showflat(c.message, flat, choice, rcount)
-        bot.edit_message_reply_markup(chat_id=userid, message_id=c.message.message_id, reply_markup=None)
+        key = types.InlineKeyboardMarkup()
+        select_but = types.InlineKeyboardButton(text='Выбрать ✅', callback_data='Select')
+        key.add(select_but)
+        bot.edit_message_reply_markup(chat_id=userid, message_id=c.message.message_id, reply_markup=key)
 
 
 @bot.message_handler(content_types=['text'])
@@ -504,8 +510,11 @@ def message(m: Message):
                     log = 'User %s @%s %s %s pressed "next" %s' % (userid, username, firstname, lastname, choice)
                     slog('info', log)
                     try:
+                        key = types.InlineKeyboardMarkup()
+                        select_but = types.InlineKeyboardButton(text='Выбрать ✅', callback_data='Select')
+                        key.add(select_but)
                         bot.edit_message_reply_markup(chat_id=userid, message_id=get_last_message(userid),
-                                                  reply_markup=None)
+                                                  reply_markup=key)
                     except: pass
                     showflat(m, flat, choice, rcount)
                 else:
