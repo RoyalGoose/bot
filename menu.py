@@ -72,7 +72,7 @@ class Keyboard:
 
     def show_menu(m, rcount):
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)#, one_time_keyboard=True)
-        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Ещё ▶']])
+        keyboard.add(*[types.KeyboardButton(name) for name in ['Новый поиск ↩', 'Связь 📞']])
         bot.send_chat_action(m.chat.id, action='typing')
         text = "По вашему запросу найдено: <b>" + str(rcount) + " вариантов</b>\n\n" \
                                                              "<i>Для выбора квартиры, ответье на нужное сообщение с <b>любым</b> текстом</i>"
@@ -101,3 +101,13 @@ class InlineKeyboard:
         key.add(rieltor, tg)
         bot.send_chat_action(m.chat.id, action='typing')
         bot.send_message(m.chat.id, '📞 Наши контакты:', reply_markup=key)
+
+    def rieltor(m):
+        key = types.InlineKeyboardMarkup()
+        rieltor = types.InlineKeyboardButton(
+            text='📞',
+            url='t.me/medianadmin'
+        )
+        key.add(rieltor)
+        bot.send_chat_action(m.chat.id, action='typing')
+        bot.send_message(m.chat.id, 'Риелтор', reply_markup=key)

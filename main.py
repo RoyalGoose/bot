@@ -16,7 +16,7 @@ import getRowOperands
 import getFilterText
 import actions
 
-bot = telebot.TeleBot(token=TOKEN, threaded=True)
+bot = telebot.TeleBot(token=TOKEN, threaded=False)
 apihelper.proxy = {'socks5': PROXY}
 
 
@@ -521,6 +521,10 @@ def message(m: Message):
                     text = 'Закончились квартиры в выбранном фильтре, нажмите "Новый поиск" для составления нового фильтра'
                     bot.send_chat_action(m.chat.id, action="typing")
                     bot.send_message(m.chat.id, text)
+            if m.text == 'Связь 📞':
+                log = 'User %s @%s %s %s pressed "rieltor"' % (userid, username, firstname, lastname)
+                slog('info', log)
+                InlineKeyboard.rieltor(m)
 
     elif m.text == 'Задать вопрос ❓':
         update_db(userid, properties=['stage'], values=['question'])
@@ -629,10 +633,10 @@ def send_doc(id, f, mar, cap):
 
 def send_pdf(m: Message, flat, a, key):
     flat_id = flat[0]
-    lat = str(flat[5])[:-2]
-    lat = float(lat[:2] + '.' + lat[2:])
-    lon = str(flat[6])[:-2]
-    lon = float(lon[:2] + '.' + lon[2:])
+    # lat = str(flat[5])[:-2]
+    # lat = float(lat[:2] + '.' + lat[2:])
+    # lon = str(flat[6])[:-2]
+    # lon = float(lon[:2] + '.' + lon[2:])
     f = open(PDF_PATH + '/%s.pdf' % flat_id, "rb")
     # bot.send_chat_action(m.chat.id, action='upload_document')
     # bot.send_document(m.chat.id, f, reply_markup=key, caption=a)  # , caption='Презентация %s' % flat_id)
